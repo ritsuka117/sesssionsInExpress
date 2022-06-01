@@ -1,14 +1,23 @@
 
 const express = require('express');
 const session = require('express-session');
+const store = require('connect-pg-simple');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.set('view engine', 'pug');
 app.use(session({
+  store: new (store(session))(),
   secret: 'a5d63fc5-17a5-459c-b3ba-6d81792158fc',
   resave: false,
+  maxAge: 10000,
   saveUninitialized: false,
+  httpOnly: true,
+  path: '/',
+  secure: true
+  
 }));
 
 app.use((req, res, next) => {
